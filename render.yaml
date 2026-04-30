@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: yc-launches-scraper
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit

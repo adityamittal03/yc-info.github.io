@@ -11,12 +11,18 @@ const publicDir = path.join(rootDir, "public");
 const exportsDir = path.join(rootDir, "exports");
 const dataPath = path.join(rootDir, "data", "yc-launches.json");
 const port = Number(process.env.PORT || 3000);
+const host = process.env.HOST || "0.0.0.0";
 
 let activeScrape = null;
 
 const server = createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${request.headers.host}`);
+
+    if (url.pathname === "/healthz" && request.method === "GET") {
+      sendJson(response, 200, { ok: true });
+      return;
+    }
 
     if (url.pathname === "/api/data" && request.method === "GET") {
       await sendSavedData(response);
@@ -56,7 +62,7 @@ server.on("error", (error) => {
   process.exit(1);
 });
 
-server.listen(port, () => {
+server.listen(port, host, () => {
   console.log(`YC Launches scraper running at http://localhost:${port}`);
 });
 

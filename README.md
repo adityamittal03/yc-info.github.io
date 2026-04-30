@@ -10,7 +10,13 @@ npm run dev
 
 Open `http://localhost:3000`, choose the number of pages, and click `Scrape`.
 
-For deployed environments, use:
+## Publish A Scraping Website
+
+GitHub Pages cannot run the scraper. It only serves static files, so the Pages URL is a viewer/exporter for the committed `data/yc-launches.json` file.
+
+To publish a URL where `Scrape` works, deploy this repo as a Node web service. The repo includes `render.yaml` for Render. In Render, create a new Blueprint from this GitHub repo. The deployed `.onrender.com` URL serves the local app UI and the `/api/scrape` backend together.
+
+For any other Node host, use:
 
 ```bash
 npm start
