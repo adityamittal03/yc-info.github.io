@@ -1,0 +1,8 @@
+node_modules/
+.env
+.DS_Store
+data/*.json
+!data/yc-launches.json
+exports/*.json
+exports/*.csv
+exports/*.md

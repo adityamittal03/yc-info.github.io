@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YC Launches Scraper</title>
+    <link rel="stylesheet" href="public/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">YC Launches</p>
+          <h1>Scrape, review, export.</h1>
+          <p class="intro">
+            Browse a static YC Launches dataset. Run the scraper locally to refresh the data.
+          </p>
+        </div>
+        <div class="panel control-panel">
+          <label>
+            Pages
+            <input id="pages" type="number" min="1" max="10" value="1">
+            <span class="hint">Up to 100 launches per page.</span>
+          </label>
+          <label>
+            Limit
+            <input id="limit" type="number" min="0" value="0" placeholder="0 = none">
+            <span class="hint">Max rows. 0 means no limit.</span>
+          </label>
+          <label>
+            Concurrency
+            <input id="concurrency" type="number" min="1" max="10" value="4">
+            <span class="hint">Parallel fetches. 4 is safe.</span>
+          </label>
+          <div class="checkbox-row">
+            <label class="checkbox">
+              <input id="includeLaunchDetails" type="checkbox" checked>
+              Launch body
+            </label>
+            <label class="checkbox">
+              <input id="includeCompanyDetails" type="checkbox" checked>
+              Company profiles
+            </label>
+          </div>
+          <div class="control-actions">
+            <button id="scrapeBtn" class="primary">Scrape</button>
+            <button id="loadBtn">Load saved</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolbar panel">
+        <div>
+          <strong id="recordCount">0 launches</strong>
+          <span id="metaText">No data loaded.</span>
+        </div>
+        <div class="search-box">
+          <input id="search" type="search" placeholder="Search any field: startup, founder, URL, industry, tag">
+          <button id="clearSearchBtn" type="button">Clear</button>
+        </div>
+        <div class="actions">
+          <button id="csvBtn">Download CSV</button>
+          <button id="jsonBtn">Download JSON</button>
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status"></p>
+
+      <section class="table-wrap panel">
+        <table>
+          <thead>
+            <tr id="headerRow"></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="public/app.js" type="module"></script>
+  </body>
+</html>
