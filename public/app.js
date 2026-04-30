@@ -51,18 +51,20 @@ renderHeader();
 configureHostMode();
 render();
 
-elements.scrapeBtn.addEventListener("click", scrape);
-elements.loadBtn.addEventListener("click", loadSaved);
-elements.search.addEventListener("input", render);
-elements.clearSearchBtn.addEventListener("click", () => {
-  elements.search.value = "";
+elements.scrapeBtn?.addEventListener("click", scrape);
+elements.loadBtn?.addEventListener("click", loadSaved);
+elements.search?.addEventListener("input", render);
+elements.clearSearchBtn?.addEventListener("click", () => {
+  if (elements.search) {
+    elements.search.value = "";
+  }
   render();
-  elements.search.focus();
+  elements.search?.focus();
 });
-elements.csvBtn.addEventListener("click", () =>
+elements.csvBtn?.addEventListener("click", () =>
   download("yc-launches.csv", toCsv(filteredRecords()), "text/csv;charset=utf-8")
 );
-elements.jsonBtn.addEventListener("click", () =>
+elements.jsonBtn?.addEventListener("click", () =>
   download(
     "yc-launches.json",
     JSON.stringify({ meta, records: filteredRecords() }, null, 2),
@@ -82,8 +84,8 @@ async function scrape() {
       pages: readInteger(elements.pages, 1, 1, 50),
       limit: readInteger(elements.limit, 0, 0, 10000),
       concurrency: readInteger(elements.concurrency, 4, 1, 10),
-      includeLaunchDetails: elements.includeLaunchDetails.checked,
-      includeCompanyDetails: elements.includeCompanyDetails.checked
+      includeLaunchDetails: elements.includeLaunchDetails?.checked ?? true,
+      includeCompanyDetails: elements.includeCompanyDetails?.checked ?? true
     };
     const response = await fetch("/api/scrape", {
       method: "POST",
@@ -125,23 +127,37 @@ async function loadSaved() {
 }
 
 function renderHeader() {
+  if (!elements.headerRow) {
+    return;
+  }
   elements.headerRow.innerHTML = columns.map(([, label]) => `<th>${escapeHtml(label)}</th>`).join("");
 }
 
 function render() {
   const visible = filteredRecords();
-  const query = normalizedSearch(elements.search.value);
-  elements.recordCount.textContent = query
-    ? `${visible.length} of ${records.length} launch${records.length === 1 ? "" : "es"}`
-    : `${visible.length} launch${visible.length === 1 ? "" : "es"}`;
-  elements.metaText.textContent = meta.scrapedAt
-    ? `Scraped ${new Date(meta.scrapedAt).toLocaleString()} from ${meta.source}.`
-    : "No data loaded.";
-  elements.clearSearchBtn.disabled = !query;
+  const query = normalizedSearch(elements.search?.value);
+  if (elements.recordCount) {
+    elements.recordCount.textContent = query
+      ? `${visible.length} of ${records.length} launch${records.length === 1 ? "" : "es"}`
+      : `${visible.length} launch${visible.length === 1 ? "" : "es"}`;
+  }
+  if (elements.metaText) {
+    elements.metaText.textContent = meta.scrapedAt
+      ? `Scraped ${new Date(meta.scrapedAt).toLocaleString()} from ${meta.source}.`
+      : "No data loaded.";
+  }
+  if (elements.clearSearchBtn) {
+    elements.clearSearchBtn.disabled = !query;
+  }
+
+  if (!elements.tableBody) {
+    return;
+  }
 
   if (!visible.length) {
+    const searchValue = elements.search?.value?.trim() || "";
     const message = records.length && query
-      ? `No rows match "${escapeHtml(elements.search.value.trim())}".`
+      ? `No rows match "${escapeHtml(searchValue)}".`
       : "No rows to display. Scrape fresh data or load saved data first.";
     elements.tableBody.innerHTML = `<tr><td class="empty" colspan="${columns.length}">${message}</td></tr>`;
     return;
@@ -156,7 +172,7 @@ function render() {
 }
 
 function filteredRecords() {
-  const query = normalizedSearch(elements.search.value);
+  const query = normalizedSearch(elements.search?.value);
   if (!query) {
     return records;
   }
@@ -204,8 +220,12 @@ function download(filename, text, type = "text/plain;charset=utf-8") {
 }
 
 function setBusy(isBusy, message = "") {
-  elements.scrapeBtn.disabled = isStaticHost || isBusy;
-  elements.loadBtn.disabled = isBusy;
+  if (elements.scrapeBtn) {
+    elements.scrapeBtn.disabled = isStaticHost || isBusy;
+  }
+  if (elements.loadBtn) {
+    elements.loadBtn.disabled = isBusy;
+  }
   if (message) {
     setStatus(message);
   }
@@ -215,16 +235,23 @@ function configureHostMode() {
   if (!isStaticHost) {
     return;
   }
-  elements.controlPanel.hidden = true;
-  elements.controlPanel.setAttribute("aria-hidden", "true");
+  if (elements.controlPanel) {
+    elements.controlPanel.hidden = true;
+    elements.controlPanel.setAttribute("aria-hidden", "true");
+  }
   loadSaved();
 }
 
 function setStatus(message) {
-  elements.status.textContent = message || "";
+  if (elements.status) {
+    elements.status.textContent = message || "";
+  }
 }
 
 function readInteger(input, fallback, min, max) {
+  if (!input) {
+    return fallback;
+  }
   const number = Number.parseInt(input.value, 10);
   if (!Number.isFinite(number)) {
     input.value = String(fallback);

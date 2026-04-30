@@ -4,47 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YC Launches Scraper</title>
-    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet" href="public/styles.css?v=20260430-3">
   </head>
   <body>
     <main class="shell">
-      <section class="hero">
+      <section class="hero public-hero">
         <div>
           <p class="eyebrow">YC Launches</p>
           <p class="intro">
             Browse a static YC Launches dataset. Run the scraper locally to refresh the data.
           </p>
-        </div>
-        <div class="panel control-panel" id="controlPanel">
-          <label>
-            Pages
-            <input id="pages" type="number" min="1" max="10" value="1">
-            <span class="hint">Up to 100 launches per page.</span>
-          </label>
-          <label>
-            Limit
-            <input id="limit" type="number" min="0" value="0" placeholder="0 = none">
-            <span class="hint">Max rows. 0 means no limit.</span>
-          </label>
-          <label>
-            Concurrency
-            <input id="concurrency" type="number" min="1" max="10" value="4">
-            <span class="hint">Parallel fetches. 4 is safe.</span>
-          </label>
-          <div class="checkbox-row">
-            <label class="checkbox">
-              <input id="includeLaunchDetails" type="checkbox" checked>
-              Launch body
-            </label>
-            <label class="checkbox">
-              <input id="includeCompanyDetails" type="checkbox" checked>
-              Company profiles
-            </label>
-          </div>
-          <div class="control-actions">
-            <button id="scrapeBtn" class="primary">Scrape</button>
-            <button id="loadBtn">Load saved</button>
-          </div>
         </div>
       </section>
 
@@ -75,6 +44,6 @@
       </section>
     </main>
 
-    <script src="public/app.js" type="module"></script>
+    <script src="public/app.js?v=20260430-3" type="module"></script>
   </body>
 </html>

@@ -86,6 +86,10 @@ input {
   margin-bottom: 1.5rem;
 }
 
+.public-hero {
+  grid-template-columns: 1fr;
+}
+
 .eyebrow {
   color: var(--accent-2);
   font-size: 0.86rem;
