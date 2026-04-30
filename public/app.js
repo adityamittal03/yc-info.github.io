@@ -29,6 +29,7 @@ const isStaticHost = location.protocol === "file:" || location.hostname.endsWith
 
 const elements = {
   pages: document.querySelector("#pages"),
+  controlPanel: document.querySelector("#controlPanel"),
   limit: document.querySelector("#limit"),
   concurrency: document.querySelector("#concurrency"),
   includeLaunchDetails: document.querySelector("#includeLaunchDetails"),
@@ -214,18 +215,8 @@ function configureHostMode() {
   if (!isStaticHost) {
     return;
   }
-  elements.scrapeBtn.disabled = true;
-  elements.scrapeBtn.title = "Scraping requires the local Node app.";
-  elements.loadBtn.textContent = "Load data";
-  for (const input of [
-    elements.pages,
-    elements.limit,
-    elements.concurrency,
-    elements.includeLaunchDetails,
-    elements.includeCompanyDetails
-  ]) {
-    input.disabled = true;
-  }
+  elements.controlPanel.hidden = true;
+  elements.controlPanel.setAttribute("aria-hidden", "true");
   loadSaved();
 }
 
